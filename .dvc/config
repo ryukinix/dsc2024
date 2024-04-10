@@ -1,0 +1,5 @@
+[core]
+    remote = origin
+    autostage = true
+['remote "origin"']
+    url = gdrive://154y1KT5eZbd13zhqxQwhqXxse9e43pse
