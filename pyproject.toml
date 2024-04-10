@@ -1,0 +1,61 @@
+[project]
+name = "dsc2024"
+version = "0.1.0"
+description = "ITA Data Science Challenge 2024"
+authors = [
+    {name = "Manoel Vilela", email = "manoel_vilela@engineer.com"},
+]
+dependencies = [
+    "metar>=1.11.0",
+    "scikit-learn>=1.4.0",
+    "plot-keras-history>=1.1.38",
+    "tensorflow>=2.15.1",
+    "pandas>=2.2.1",
+    "keras>=2.15.0",
+]
+requires-python = ">=3.10,<3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool]
+[tool.black]
+line_length = 120
+target_version = ["py310"]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "black-macchiato>=1.3.0",
+    "black>=22.8.0",
+    "coverage>=7.2.5",
+    "flake8>=5.0.4",
+    "jupyterlab>=3.4.6",
+    "mypy==0.981",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.8.2",
+    "pytest>=7.3.1",
+    "pydot>=2.0.0",
+    "wordcloud>=1.9.3",
+    "pycaret>=2.2.2",
+]
+
+[tool.pdm.scripts]
+lint = {composite = ["flake8", "mypy --install-types"]}
+test = "pytest -vv -p no:cacheprovider --cov=dsc2024 --cov-report xml:tests/coverage.xml --cov-report term -k"
+tests = {composite = ["test test", "coverage json"]}
+format = "black egsis/ tests/"
+check = {composite = ["lint dsc2024/", "test tests/"]}
+notebook = "jupyter lab"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
