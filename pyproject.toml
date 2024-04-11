@@ -6,7 +6,6 @@ authors = [
     {name = "Manoel Vilela", email = "manoel_vilela@engineer.com"},
 ]
 dependencies = [
-    "metar>=1.11.0",
     "scikit-learn>=1.4.0",
     "plot-keras-history>=1.1.38",
     "tensorflow>=2.15.1",
@@ -45,6 +44,8 @@ dev = [
     "pydot>=2.0.0",
     "wordcloud>=1.9.3",
     "pycaret>=2.2.2",
+    "kaggle>=1.6.11",
+    "MetPy>=1.6.2",
 ]
 
 [tool.pdm.scripts]
