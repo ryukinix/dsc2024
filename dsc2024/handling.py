@@ -36,5 +36,14 @@ def parse_metar_as_dataframe(
 
 
 def parse_hora_ref_as_series(series: pandas.Series) -> pandas.Series:
+    """Parse series of hora_ref string 2022-06-01T01:00:00Z as datetime"""
     date_format = "%Y-%m-%dT%H:%M:%SZ"
     return series.apply(lambda s: datetime.datetime.strptime(s, date_format))
+
+
+def expand_metar_and_metaf_features(df: pandas.DataFrame) -> pandas.DataFrame:
+    """Expand attributes of metar and metaf columns"""
+    df_metar = parse_metar_as_dataframe(df, metar_column="metar").add_prefix("metar_")  # noqa
+    df_metaf = parse_metar_as_dataframe(df, metar_column="metaf").add_prefix("metaf_")  # noqa
+    df_metar_and_metaf = df_metar.join(df_metaf, how="left")
+    return df.join(df_metar_and_metaf).drop(columns=["metaf", "metar"])
