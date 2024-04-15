@@ -11,9 +11,10 @@ datasets_dir = Path(os.path.join(_base_path, "datasets"))
 
 
 def get_public_dataset(
-    parse_hora_ref=True,
-    expand_metar_and_metaf=True,
-    sampling: Optional[int] = None
+    parse_hora_ref: bool = True,
+    expand_metar_and_metaf: bool = True,
+    sampling: Optional[int] = None,
+    set_flightid_as_index: bool = True
 ) -> pandas.DataFrame:
     df = pandas.read_csv(datasets_dir / "public.csv")
 
@@ -23,7 +24,8 @@ def get_public_dataset(
         df.hora_ref = handling.parse_hora_ref_as_series(df.hora_ref)
     if expand_metar_and_metaf:
         df = handling.expand_metar_and_metaf_features(df)
-
+    if set_flightid_as_index:
+        df.set_index("flightid", inplace=True)
     return df
 
 
