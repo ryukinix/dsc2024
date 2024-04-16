@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:7454d0026a26ebd6cbe61878c3e45504e8e234e6a63781bf5bdcae7f59af8802"
+content_hash = "sha256:f673afd00e8e08958cc78c816b0973b2187fecf4869ed7f8725b07f8209ae5ba"
 
 [[package]]
 name = "absl-py"
@@ -365,7 +365,7 @@ files = [
 name = "catboost"
 version = "1.2.3"
 summary = "CatBoost Python Package"
-groups = ["dev"]
+groups = ["default", "dev"]
 dependencies = [
     "graphviz",
     "matplotlib",
@@ -1072,7 +1072,7 @@ name = "graphviz"
 version = "0.20.3"
 requires_python = ">=3.8"
 summary = "Simple Python interface for Graphviz"
-groups = ["dev"]
+groups = ["default", "dev"]
 files = [
     {file = "graphviz-0.20.3-py3-none-any.whl", hash = "sha256:81f848f2904515d8cd359cc611faba817598d2feaac4027b266aa3eda7b3dde5"},
     {file = "graphviz-0.20.3.zip", hash = "sha256:09d6bc81e6a9fa392e7ba52135a9d49f1ed62526f96499325930e87ca1b5925d"},
@@ -2629,7 +2629,7 @@ name = "plotly"
 version = "5.20.0"
 requires_python = ">=3.8"
 summary = "An open-source, interactive data visualization library for Python"
-groups = ["dev"]
+groups = ["default", "dev"]
 dependencies = [
     "packaging",
     "tenacity>=6.2.0",
@@ -3869,7 +3869,7 @@ name = "tenacity"
 version = "8.2.3"
 requires_python = ">=3.7"
 summary = "Retry code until it succeeds"
-groups = ["dev"]
+groups = ["default", "dev"]
 files = [
     {file = "tenacity-8.2.3-py3-none-any.whl", hash = "sha256:ce510e327a630c9e1beaf17d42e6ffacc88185044ad85cf74c0a8887c6a0f88c"},
     {file = "tenacity-8.2.3.tar.gz", hash = "sha256:5398ef0d78e63f40007c1fb4c0bff96e1911394d2fa8d194f77619c05ff6cc8a"},
