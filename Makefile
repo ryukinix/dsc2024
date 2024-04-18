@@ -16,7 +16,7 @@ DOCKER_RUN = $(DOCKER) run $(DOCKER_FLAGS) \
 					-t \
 					-v $(PWD)/tests:/app/tests \
 					-w /app
-MOUNT_NOTEBOOK = -v $(PWD)/notebooks:/app/notebooks
+MOUNT_NOTEBOOK = -v $(PWD)/notebooks:/app/notebooks -v $(PWD)/dsc2024:/app/dsc2024 -v $(PWD)/datasets:/app/datasets
 EXPOSE_PORT = --net=host
 
 
