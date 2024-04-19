@@ -3,12 +3,10 @@ name = "dsc2024"
 version = "0.1.0"
 description = "ITA Data Science Challenge 2024"
 authors = [
-    {name = "Manoel Vilela", email = "manoel_vilela@engineer.com"},
+    {name= "Jorge Luiz Franco", email= "jorgelwyz.franco@gmail.com ; name = "Manoel Vilela", email = "manoel_vilela@engineer.com"},
 ]
 dependencies = [
     "scikit-learn>=1.4.0",
-    "plot-keras-history>=1.1.38",
-    "tensorflow>=2.15.1",
     "pandas>=2.2.1",
     "keras>=2.15.0",
     "catboost>=1.2.3",
