@@ -29,15 +29,31 @@ def get_public_dataset(
     return df
 
 
-def get_train_dataset(sampling: Optional[int] = None):
+def _generate_raw_data_kwargs(raw_data: bool = True):
+    """Generate arguments to not add extra parsing"""
+    kwargs = {}
+    if raw_data:
+        kwargs = {
+            "expand_metar_and_metaf": False,
+            "set_flightid_as_index": False,
+            "parse_hora_ref": False,
+        }
+    return kwargs
+
+
+def get_train_dataset(sampling: Optional[int] = None,
+                      raw_data: bool = False):
     """Get all rows with 'espera' labeled as 0 or 1"""
-    df = get_public_dataset(sampling=sampling)
+    raw_kwargs = _generate_raw_data_kwargs(raw_data)
+    df = get_public_dataset(sampling=sampling, **raw_kwargs)
     mask = df.notna().espera
     return df[mask]
 
 
-def get_test_dataset(sampling: Optional[int] = None):
+def get_test_dataset(sampling: Optional[int] = None,
+                     raw_data: bool = False):
     """Only get rows with 'espera' with missing-values"""
-    df = get_public_dataset(sampling=sampling)
+    raw_kwargs = _generate_raw_data_kwargs(raw_data)
+    df = get_public_dataset(sampling=sampling, **raw_kwargs)
     mask = df.isna().espera
     return df[mask]
