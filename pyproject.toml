@@ -42,6 +42,7 @@ dev = [
     "pytest>=7.3.1",
     "wordcloud>=1.9.3",
     "MetPy>=1.6.2",
+    "dvc[gdrive]>=3.50.0",
 ]
 
 [tool.pdm.scripts]
