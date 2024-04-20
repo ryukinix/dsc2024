@@ -1,6 +1,15 @@
+from typing import Dict
+from typing import Callable, Tuple
+
 import networkx as nx
 import pandas as pd
-from typing import Dict
+import numpy as np
+from PIL import Image as PIL_Image
+
+from torch import nn
+from torchvision.models import ViT_B_16_Weights
+from torchvision.models.vision_transformer import vit_b_16
+import torch
 
 
 def insert_graph_measure(df: pd.DataFrame, measure_dict: Dict, name_measure: str, directed: bool = True):
@@ -130,26 +139,24 @@ def graph_features_testdata(df_test: pd.DataFrame, df_train: pd.DataFrame):
     return df_test
 
 
-from torch import nn
-import torch
-from torchvision.models.vision_transformer import vit_b_16
-from torchvision.models import ViT_B_16_Weights
-import numpy as np
-from PIL import Image as PIL_Image
-from typing import Callable, Tuple
-
-def load_extractor() -> Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]:
+def load_transformer_feature_extractor() -> Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]:
     """
     Load the Vision Transformer (ViT) model and its preprocessing function.
 
     Returns:
-        Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]: A tuple containing the preprocessing function and the ViT model.
+        Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]:
+        A tuple containing the preprocessing function and the ViT model.
     """
     vit = vit_b_16(weights=ViT_B_16_Weights.DEFAULT)
     preprocessing = ViT_B_16_Weights.DEFAULT.transforms()
     return preprocessing, vit
 
-def embed_image(img: PIL_Image.Image, preprocessing: Callable[[PIL_Image.Image], torch.Tensor], vit: nn.Module) -> np.ndarray:
+
+def feature_extraction_from_image(
+    img: PIL_Image.Image,
+    preprocessing: Callable[[PIL_Image.Image], torch.Tensor],
+    vit: nn.Module
+) -> np.ndarray:
     """
     Embed an image using a Vision Transformer (ViT) model.
 
