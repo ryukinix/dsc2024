@@ -128,3 +128,44 @@ def graph_features_testdata(df_test: pd.DataFrame, df_train: pd.DataFrame):
             df_test.loc[_, "gmatrix"] = None
 
     return df_test
+
+
+from torch import nn
+import torch
+from torchvision.models.vision_transformer import vit_b_16
+from torchvision.models import ViT_B_16_Weights
+import numpy as np
+from PIL import Image as PIL_Image
+from typing import Callable, Tuple
+
+def load_extractor() -> Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]:
+    """
+    Load the Vision Transformer (ViT) model and its preprocessing function.
+
+    Returns:
+        Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]: A tuple containing the preprocessing function and the ViT model.
+    """
+    vit = vit_b_16(weights=ViT_B_16_Weights.DEFAULT)
+    preprocessing = ViT_B_16_Weights.DEFAULT.transforms()
+    return preprocessing, vit
+
+def embed_image(img: PIL_Image.Image, preprocessing: Callable[[PIL_Image.Image], torch.Tensor], vit: nn.Module) -> np.ndarray:
+    """
+    Embed an image using a Vision Transformer (ViT) model.
+
+    Args:
+        img (PIL_Image.Image): The input image to be embedded.
+        preprocessing (Callable[[PIL_Image.Image], torch.Tensor]): A function for preprocessing the image.
+        vit (nn.Module): The Vision Transformer model.
+
+    Returns:
+        np.ndarray: The embedded representation of the input image.
+    """
+    img = preprocessing(img)
+    img = img.unsqueeze(0)
+    feats = vit._process_input(img)
+    batch_class_token = vit.class_token.expand(img.shape[0], -1, -1)
+    feats = torch.cat([batch_class_token, feats], dim=1)
+    feats = vit.encoder(feats)
+    feats = feats[:, 0]
+    return np.array(torch.flatten(feats).detach().numpy())
