@@ -31,6 +31,16 @@ target_version = ["py310"]
 [tool.mypy]
 ignore_missing_imports = true
 
+
+# NOTE(@lerax): dom 21 abr 2024 21:28:09
+# ultra fucking slow! take minutes to run mypy with this!
+[[tool.mypy.overrides]]
+module = "torch.*,torchvision.*"
+ignore_errors = true
+follow_imports = "skip"
+follow_imports_for_stubs = true
+
+
 [tool.pdm]
 [tool.pdm.dev-dependencies]
 dev = [
@@ -49,7 +59,8 @@ dev = [
 ]
 
 [tool.pdm.scripts]
-lint = {composite = ["flake8", "mypy --install-types"]}
+lint = {composite = ["flake8", "mypy --install-types --non-interactive"]}
+lint-all = {composite = ["lint dsc2024/"]}
 test = "pytest -vv -p no:cacheprovider --cov=dsc2024 --cov-report xml:tests/coverage.xml --cov-report term -k"
 tests = {composite = ["test test", "coverage json"]}
 format = "black egsis/ tests/"
