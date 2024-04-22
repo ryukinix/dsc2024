@@ -168,10 +168,9 @@ def feature_extraction_from_image(
     Returns:
         np.ndarray: The embedded representation of the input image.
     """
-    img = preprocessing(img)
-    img = img.unsqueeze(0)
-    feats = vit._process_input(img)
-    batch_class_token = vit.class_token.expand(img.shape[0], -1, -1)
+    tensor = preprocessing(img).unsqueeze(0)
+    feats = vit._process_input(tensor)
+    batch_class_token = vit.class_token.expand(tensor.shape[0], -1, -1)
     feats = torch.cat([batch_class_token, feats], dim=1)
     feats = vit.encoder(feats)
     feats = feats[:, 0]
