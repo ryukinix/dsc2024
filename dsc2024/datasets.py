@@ -8,6 +8,7 @@ from dsc2024 import handling
 
 _base_path = os.path.dirname(os.path.dirname(__file__))
 datasets_dir = Path(os.path.join(_base_path, "datasets"))
+image_embedding_path = datasets_dir / "images.pkl.xz"
 
 
 def get_public_dataset(
@@ -57,3 +58,11 @@ def get_test_dataset(sampling: Optional[int] = None,
     df = get_public_dataset(sampling=sampling, **raw_kwargs)
     mask = df.isna().espera
     return df[mask]
+
+
+def save_image_embedding(df: pandas.DataFrame):
+    df.to_pickle(image_embedding_path)
+
+
+def get_image_embedding() -> pandas.DataFrame:
+    return pandas.read_pickle(image_embedding_path)
