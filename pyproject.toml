@@ -3,7 +3,8 @@ name = "dsc2024"
 version = "0.1.0"
 description = "ITA Data Science Challenge 2024"
 authors = [
-    {name = "Manoel Vilela", email = "manoel_vilela@engineer.com"},
+    {name = "Manoel Vilela", email = "manoelmvmn@ita.br"},
+    {name = "Jorge Luiz Franco", email = "jorge.luiz@usp.com.br"},
 ]
 dependencies = [
     "scikit-learn>=1.4.0",
