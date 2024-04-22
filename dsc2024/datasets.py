@@ -1,6 +1,8 @@
 import os
+import json
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List, Tuple
+from functools import lru_cache
 
 import pandas
 
@@ -66,3 +68,14 @@ def save_image_embedding(df: pandas.DataFrame):
 
 def get_image_embedding() -> pandas.DataFrame:
     return pandas.read_pickle(image_embedding_path)
+
+
+@lru_cache
+def get_image_mask_points() -> List[Tuple[int, int]]:
+    fpath = datasets_dir / "image-mask" / "image-mask.json"
+    with fpath.open(encoding="UTF-8") as source:
+        image_mask = json.load(source)[0]
+    return [
+        (round(p["x"]), round(p["y"]))
+        for p in image_mask["content"]
+    ]
