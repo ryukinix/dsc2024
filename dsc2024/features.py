@@ -1,5 +1,4 @@
-from typing import Dict
-from typing import Callable, Tuple
+from typing import Callable, Tuple, Dict
 
 import networkx as nx
 import pandas as pd
