@@ -174,3 +174,21 @@ def feature_extraction_from_image(
     feats = vit.encoder(feats)
     feats = feats[:, 0]
     return np.array(torch.flatten(feats).detach().numpy())
+
+
+def _categorize_hour(hour: int) -> str:
+    if hour <= 8:
+        return "madrugada"
+    elif hour <= 16:
+        return "dia"
+    else:
+        return "tarde-noite"
+
+
+def create_timedelta_features(df: pd.DataFrame) -> pd.DataFrame:
+    df["hora_do_voo"] = df.hora_ref.apply(lambda x: x.hour)
+    df["hora_classe"] = df.hora_ref.apply(lambda x: _categorize_hour(x.hour))
+
+    # this feature reduce the final score
+    # df["voo_no_fim_de_semana"] = df.hora_ref.dt.dayofweek > 4
+    return df
