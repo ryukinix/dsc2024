@@ -2,14 +2,14 @@ from typing import Optional
 from dataclasses import dataclass
 import os
 
-from requests.exceptions import HTTPError
-from tqdm_joblib import tqdm_joblib
 
+from tqdm_joblib import tqdm_joblib
+from joblib import Memory
+from loguru import logger
 import joblib
 import numpy as np
 import pandas as pd
 import requests
-from loguru import logger
 
 
 from dsc2024 import datasets
@@ -24,6 +24,7 @@ logger.debug("loading vision transformers as global variables")
 MASK = images.generate_pil_crop_mask(datasets.get_image_mask_points())
 PREPROCESSOR, VIT = features.load_transformer_feature_extractor()
 logger.debug("transformers loaded!")
+MEMORY = Memory(datasets.datasets_dir / 'cache', verbose=0)
 
 
 @dataclass
@@ -32,12 +33,13 @@ class FlightImageVector:
     vector: Optional[np.ndarray]
 
 
+@MEMORY.cache
 def download_flight_image_vector(flightid: str, url: Optional[str]) -> FlightImageVector:
     if not isinstance(url, str) or not url:
         return FlightImageVector(flightd=flightid, vector=None)
     response = requests.get(url)
     if response.status_code != 200:
-        raise HTTPError(f"Failed to retrieve image from url={url} of flightd={flightid}")
+        return FlightImageVector(flightd=flightid, vector=None)
     img = images.read_image_from_response_and_cropit(response, MASK)
     vector = features.feature_extraction_from_image(img, PREPROCESSOR, VIT)
     return FlightImageVector(
