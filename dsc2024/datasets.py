@@ -10,7 +10,7 @@ from dsc2024 import handling
 
 _base_path = os.path.dirname(os.path.dirname(__file__))
 _datasets_dir = os.environ.get(
-    "DSC2024_DATASET_DIR",
+    "DSC2024_DATASETS_DIR",
     os.path.join(_base_path, "datasets")
 )
 datasets_dir = Path(_datasets_dir)

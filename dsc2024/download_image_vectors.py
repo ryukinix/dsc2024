@@ -33,7 +33,7 @@ class FlightImageVector:
 
 
 def download_flight_image_vector(flightid: str, url: Optional[str]) -> FlightImageVector:
-    if not url:
+    if not isinstance(url, str) or not url:
         return FlightImageVector(flightd=flightid, vector=None)
     response = requests.get(url)
     if response.status_code != 200:
