@@ -34,13 +34,22 @@ class FlightImageVector:
 
 
 @MEMORY.cache
+def download_image(url: str) -> Optional[images.PIL_Image.Image]:
+    # cache only download, not feature extraction
+    # FIXME: it should cache only raw images instead of cropped?
+    response = requests.get(url)
+    if response.status_code != 200:
+        return None
+    return images.read_image_from_response_and_cropit(response, MASK)
+
+
 def download_flight_image_vector(flightid: str, url: Optional[str]) -> FlightImageVector:
     if not isinstance(url, str) or not url:
         return FlightImageVector(flightd=flightid, vector=None)
-    response = requests.get(url)
-    if response.status_code != 200:
+    img = download_image(url)
+    if img is None:
         return FlightImageVector(flightd=flightid, vector=None)
-    img = images.read_image_from_response_and_cropit(response, MASK)
+
     vector = features.feature_extraction_from_image(img, PREPROCESSOR, VIT)
     return FlightImageVector(
         flightd=flightid,
