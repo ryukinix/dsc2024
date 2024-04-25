@@ -4,7 +4,7 @@ Data Handling common tasks transformations and normalization
 
 from typing import Optional, List
 
-import pandas
+import pandas as pd
 import datetime
 
 from metpy.io.metar import Metar, parse_metar, ParseError
@@ -17,9 +17,9 @@ def _create_default_metar_value() -> Metar:
 
 
 def parse_metar_as_dataframe(
-    df: pandas.DataFrame,
+    df: pd.DataFrame,
     metar_column="metar"
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     """Expected to hora_ref column be already normalized"""
     index = df.index.copy()
     metars: List[Optional[Metar]] = []
@@ -40,19 +40,39 @@ def parse_metar_as_dataframe(
             print(f"dataset row:{i}", e)
             metars.append(default_metar_value)
 
-    return pandas.DataFrame.from_records(metars, index=index, columns=Metar._fields)
+    return pd.DataFrame.from_records(metars, index=index, columns=Metar._fields)
 
 
-def parse_hora_ref_as_series(series: pandas.Series) -> pandas.Series:
+def parse_hora_ref_as_series(series: pd.Series) -> pd.Series:
     """Parse series of hora_ref string 2022-06-01T01:00:00Z as datetime"""
     date_format = "%Y-%m-%dT%H:%M:%SZ"
     return series.apply(lambda s: datetime.datetime.strptime(s, date_format))
 
 
-def expand_metar_and_metaf_features(df: pandas.DataFrame) -> pandas.DataFrame:
+def expand_metar_and_metaf_features(df: pd.DataFrame) -> pd.DataFrame:
     """Expand attributes of metar and metaf columns"""
     df_metar = parse_metar_as_dataframe(df, metar_column="metar").add_prefix("metar_")  # noqa
     df_metaf = parse_metar_as_dataframe(df, metar_column="metaf").add_prefix("metaf_")  # noqa
     assert len(df_metaf.columns) > 1, "metaf parsing failed, try again"
     df_metar_and_metaf = df_metar.join(df_metaf, how="left")
     return df.join(df_metar_and_metaf).drop(columns=["metaf", "metar"])
+
+
+def add_image_vectors(
+    df: pd.DataFrame,
+    image_vectors: pd.DataFrame,
+    naive_imputation: bool = True
+) -> pd.DataFrame:
+    # imputation
+    # assume df index is already flightd
+    image_vectors.set_index("flightid", inplace=True)
+    if naive_imputation:
+        mean_vector = image_vectors["vector"].mean()
+        # FIXME: doesn't work with vectors
+        # image_vectors.fillna(mean_vector)
+        nulls = image_vectors[image_vectors.vector.isna()]
+
+        for i in nulls.index:
+            image_vectors.at[i, "vector"] = mean_vector
+
+    return df.join(image_vectors)

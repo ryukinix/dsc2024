@@ -19,6 +19,7 @@ datasets_dir = Path(_datasets_dir)
 def get_public_dataset(
     parse_hora_ref: bool = True,
     expand_metar_and_metaf: bool = True,
+    add_image_vectors: bool = True,
     sampling: Optional[int] = None,
     set_flightid_as_index: bool = True
 ) -> pandas.DataFrame:
@@ -35,6 +36,9 @@ def get_public_dataset(
         df = handling.expand_metar_and_metaf_features(df)
     if set_flightid_as_index:
         df.set_index("flightid", inplace=True)
+    if add_image_vectors:
+        df_image = get_image_embedding()
+        df = handling.add_image_vectors(df, df_image)
     return df
 
 
@@ -46,6 +50,7 @@ def _generate_raw_data_kwargs(raw_data: bool = True):
             "expand_metar_and_metaf": False,
             "set_flightid_as_index": False,
             "parse_hora_ref": False,
+            "add_image_vectors": False
         }
     return kwargs
 

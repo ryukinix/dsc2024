@@ -29,7 +29,7 @@ MEMORY = Memory(datasets.datasets_dir / 'cache', verbose=0)
 
 @dataclass
 class FlightImageVector:
-    flightd: str
+    flightid: str
     vector: Optional[np.ndarray]
 
 
@@ -45,14 +45,14 @@ def download_image(url: str) -> Optional[images.PIL_Image.Image]:
 
 def download_flight_image_vector(flightid: str, url: Optional[str]) -> FlightImageVector:
     if not isinstance(url, str) or not url:
-        return FlightImageVector(flightd=flightid, vector=None)
+        return FlightImageVector(flightid=flightid, vector=None)
     img = download_image(url)
     if img is None:
-        return FlightImageVector(flightd=flightid, vector=None)
+        return FlightImageVector(flightid=flightid, vector=None)
 
     vector = features.feature_extraction_from_image(img, PREPROCESSOR, VIT)
     return FlightImageVector(
-        flightd=flightid,
+        flightid=flightid,
         vector=vector
     )
 
