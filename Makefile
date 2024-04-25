@@ -18,7 +18,8 @@ DOCKER_RUN = $(DOCKER) run $(DOCKER_FLAGS) \
 					-w /app
 MOUNT_NOTEBOOK = -v $(PWD)/notebooks:/app/notebooks -v $(PWD)/dsc2024:/app/dsc2024 -v $(PWD)/datasets:/app/datasets
 EXPOSE_PORT = --net=host
-
+MESSAGE ?= submitted through makefile
+DATASET_SUBMIT_PATH ?= datasets/catboost_submit.csv
 
 install: # install locally
 	python -m venv .venv
@@ -43,6 +44,8 @@ check: build
 	$(DOCKER_RUN) $(PROJECT_NAME) check
 	sed -i "s|/app|$(PWD)|g" tests/coverage.xml
 
+submit:
+	kaggle competitions submit -c data-science-challenge-at-eef-2024 -f "$(DATASET_SUBMIT_PATH)" -m "$(MESSAGE)"
 
 lint: build
 	$(DOCKER_RUN) $(PROJECT_NAME) lint dsc2024/ tests/

@@ -1,6 +1,14 @@
+from typing import Callable, Tuple, Dict
+
 import networkx as nx
 import pandas as pd
-from typing import Dict
+import numpy as np
+from PIL import Image as PIL_Image
+
+from torch import nn
+from torchvision.models import ViT_B_16_Weights
+from torchvision.models.vision_transformer import vit_b_16
+import torch
 
 
 def insert_graph_measure(df: pd.DataFrame, measure_dict: Dict, name_measure: str, directed: bool = True):
@@ -128,3 +136,59 @@ def graph_features_testdata(df_test: pd.DataFrame, df_train: pd.DataFrame):
             df_test.loc[_, "gmatrix"] = None
 
     return df_test
+
+
+def load_transformer_feature_extractor() -> Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]:
+    """
+    Load the Vision Transformer (ViT) model and its preprocessing function.
+
+    Returns:
+        Tuple[Callable[[PIL_Image.Image], torch.Tensor], nn.Module]:
+        A tuple containing the preprocessing function and the ViT model.
+    """
+    vit = vit_b_16(weights=ViT_B_16_Weights.DEFAULT)
+    preprocessing = ViT_B_16_Weights.DEFAULT.transforms()
+    return preprocessing, vit
+
+
+def feature_extraction_from_image(
+    img: PIL_Image.Image,
+    preprocessing: Callable[[PIL_Image.Image], torch.Tensor],
+    vit: nn.Module
+) -> np.ndarray:
+    """
+    Embed an image using a Vision Transformer (ViT) model.
+
+    Args:
+        img (PIL_Image.Image): The input image to be embedded.
+        preprocessing (Callable[[PIL_Image.Image], torch.Tensor]): A function for preprocessing the image.
+        vit (nn.Module): The Vision Transformer model.
+
+    Returns:
+        np.ndarray: The embedded representation of the input image.
+    """
+    tensor = preprocessing(img).unsqueeze(0)
+    feats = vit._process_input(tensor)
+    batch_class_token = vit.class_token.expand(tensor.shape[0], -1, -1)
+    feats = torch.cat([batch_class_token, feats], dim=1)
+    feats = vit.encoder(feats)
+    feats = feats[:, 0]
+    return np.array(torch.flatten(feats).detach().numpy())
+
+
+def _categorize_hour(hour: int) -> str:
+    if hour <= 8:
+        return "madrugada"
+    elif hour <= 16:
+        return "dia"
+    else:
+        return "tarde-noite"
+
+
+def create_timedelta_features(df: pd.DataFrame) -> pd.DataFrame:
+    df["hora_do_voo"] = df.hora_ref.apply(lambda x: x.hour)
+    df["hora_classe"] = df.hora_ref.apply(lambda x: _categorize_hour(x.hour))
+
+    # this feature reduce the final score
+    # df["voo_no_fim_de_semana"] = df.hora_ref.dt.dayofweek > 4
+    return df
