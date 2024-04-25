@@ -60,6 +60,8 @@ dev = [
     "pytest>=7.3.1",
     "wordcloud>=1.9.3",
     "dvc[gdrive]>=3.50.0",
+    "ipywidgets>=8.1.2",
+    "kaggle>=1.6.12",
 ]
 
 [tool.pdm.scripts]

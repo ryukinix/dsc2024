@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:a51aa08b9d1104888b5723031963597f604840f0ea7acfcae30165937801022b"
+content_hash = "sha256:50506556e347094b9314e5c7cc31a7ee0f5ce239b616b0d83ab77dbf04d6d6fb"
 
 [[package]]
 name = "aiohttp"
@@ -1643,6 +1643,24 @@ files = [
 ]
 
 [[package]]
+name = "ipywidgets"
+version = "8.1.2"
+requires_python = ">=3.7"
+summary = "Jupyter interactive widgets"
+groups = ["dev"]
+dependencies = [
+    "comm>=0.1.3",
+    "ipython>=6.1.0",
+    "jupyterlab-widgets~=3.0.10",
+    "traitlets>=4.3.1",
+    "widgetsnbextension~=4.0.10",
+]
+files = [
+    {file = "ipywidgets-8.1.2-py3-none-any.whl", hash = "sha256:bbe43850d79fb5e906b14801d6c01402857996864d1e5b6fa62dd2ee35559f60"},
+    {file = "ipywidgets-8.1.2.tar.gz", hash = "sha256:d0b9b41e49bae926a866e613a39b0f0097745d2b9f1f3dd406641b4a57ec42c9"},
+]
+
+[[package]]
 name = "isoduration"
 version = "20.11.0"
 requires_python = ">=3.7"
@@ -1958,6 +1976,36 @@ dependencies = [
 files = [
     {file = "jupyterlab_server-2.26.0-py3-none-any.whl", hash = "sha256:54622cbd330526a385ee0c1fdccdff3a1e7219bf3e864a335284a1270a1973df"},
     {file = "jupyterlab_server-2.26.0.tar.gz", hash = "sha256:9b3ba91cf2837f7f124fca36d63f3ca80ace2bed4898a63dd47e6598c1ab006f"},
+]
+
+[[package]]
+name = "jupyterlab-widgets"
+version = "3.0.10"
+requires_python = ">=3.7"
+summary = "Jupyter interactive widgets for JupyterLab"
+groups = ["dev"]
+files = [
+    {file = "jupyterlab_widgets-3.0.10-py3-none-any.whl", hash = "sha256:dd61f3ae7a5a7f80299e14585ce6cf3d6925a96c9103c978eda293197730cb64"},
+    {file = "jupyterlab_widgets-3.0.10.tar.gz", hash = "sha256:04f2ac04976727e4f9d0fa91cdc2f1ab860f965e504c29dbd6a65c882c9d04c0"},
+]
+
+[[package]]
+name = "kaggle"
+version = "1.6.12"
+summary = "Kaggle API"
+groups = ["dev"]
+dependencies = [
+    "bleach",
+    "certifi>=2023.7.22",
+    "python-dateutil",
+    "python-slugify",
+    "requests",
+    "six>=1.10",
+    "tqdm",
+    "urllib3",
+]
+files = [
+    {file = "kaggle-1.6.12.tar.gz", hash = "sha256:f12a05b82d2afb10a74adc69a5f8a736c64bd9934d0b5acfb4fe4f97357530b4"},
 ]
 
 [[package]]
@@ -3287,6 +3335,20 @@ files = [
 ]
 
 [[package]]
+name = "python-slugify"
+version = "8.0.4"
+requires_python = ">=3.7"
+summary = "A Python slugify application that also handles Unicode"
+groups = ["dev"]
+dependencies = [
+    "text-unidecode>=1.3",
+]
+files = [
+    {file = "python-slugify-8.0.4.tar.gz", hash = "sha256:59202371d1d05b54a9e7720c5e038f928f45daaffe41dd10822f3907b937c856"},
+    {file = "python_slugify-8.0.4-py2.py3-none-any.whl", hash = "sha256:276540b79961052b66b7d116620b36518847f52d5fd9e3a70164fc8c50faa6b8"},
+]
+
+[[package]]
 name = "pytz"
 version = "2024.1"
 summary = "World timezone definitions, modern and historical"
@@ -3871,6 +3933,16 @@ files = [
 ]
 
 [[package]]
+name = "text-unidecode"
+version = "1.3"
+summary = "The most basic Text::Unidecode port"
+groups = ["dev"]
+files = [
+    {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
+    {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
+]
+
+[[package]]
 name = "threadpoolctl"
 version = "3.4.0"
 requires_python = ">=3.8"
@@ -4197,6 +4269,17 @@ groups = ["dev"]
 files = [
     {file = "websocket-client-1.7.0.tar.gz", hash = "sha256:10e511ea3a8c744631d3bd77e61eb17ed09304c413ad42cf6ddfa4c7787e8fe6"},
     {file = "websocket_client-1.7.0-py3-none-any.whl", hash = "sha256:f4c3d22fec12a2461427a29957ff07d35098ee2d976d3ba244e688b8b4057588"},
+]
+
+[[package]]
+name = "widgetsnbextension"
+version = "4.0.10"
+requires_python = ">=3.7"
+summary = "Jupyter interactive widgets for Jupyter Notebook"
+groups = ["dev"]
+files = [
+    {file = "widgetsnbextension-4.0.10-py3-none-any.whl", hash = "sha256:d37c3724ec32d8c48400a435ecfa7d3e259995201fbefa37163124a9fcb393cc"},
+    {file = "widgetsnbextension-4.0.10.tar.gz", hash = "sha256:64196c5ff3b9a9183a8e699a4227fb0b7002f252c814098e66c4d1cd0644688f"},
 ]
 
 [[package]]
