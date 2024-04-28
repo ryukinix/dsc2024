@@ -86,6 +86,6 @@ def add_anac_extra_info(
     df_destino = df_anac.add_prefix("destino_")
     return (
         df
-        .merge(df_origem, how="left", left_on="origem", right_index=True)
+        # .merge(df_origem, how="left", left_on="origem", right_index=True)
         .merge(df_destino, how="left", left_on="destino", right_index=True)
     )
