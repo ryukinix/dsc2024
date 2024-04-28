@@ -76,3 +76,16 @@ def add_image_vectors(
             image_vectors.at[i, "vector"] = mean_vector
 
     return df.join(image_vectors)
+
+
+def add_anac_extra_info(
+    df: pd.DataFrame,
+    df_anac: pd.DataFrame
+) -> pd.DataFrame:
+    df_origem = df_anac.add_prefix("origem_")
+    df_destino = df_anac.add_prefix("destino_")
+    return (
+        df
+        .merge(df_origem, how="left", left_on="origem", right_index=True)
+        .merge(df_destino, how="left", left_on="destino", right_index=True)
+    )
