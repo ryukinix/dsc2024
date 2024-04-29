@@ -16,10 +16,12 @@ _datasets_dir = os.environ.get(
 datasets_dir = Path(_datasets_dir)
 
 
+@lru_cache
 def get_public_dataset(
     parse_hora_ref: bool = True,
     expand_metar_and_metaf: bool = True,
     add_image_vectors: bool = True,
+    add_anac_extra_info: bool = True,
     sampling: Optional[int] = None,
     set_flightid_as_index: bool = True
 ) -> pandas.DataFrame:
@@ -32,6 +34,9 @@ def get_public_dataset(
         df = df.sample(n=sampling)
     if parse_hora_ref:
         df.hora_ref = handling.parse_hora_ref_as_series(df.hora_ref)
+    if add_anac_extra_info:
+        df_anac = get_anac_aerodromos_publicos()
+        df = handling.add_anac_extra_info(df, df_anac)
     if expand_metar_and_metaf:
         df = handling.expand_metar_and_metaf_features(df)
     if set_flightid_as_index:
@@ -50,7 +55,8 @@ def _generate_raw_data_kwargs(raw_data: bool = True):
             "expand_metar_and_metaf": False,
             "set_flightid_as_index": False,
             "parse_hora_ref": False,
-            "add_image_vectors": False
+            "add_image_vectors": False,
+            "add_anac_extra_info": False
         }
     return kwargs
 
@@ -93,3 +99,24 @@ def get_image_mask_points() -> List[Tuple[int, int]]:
         (round(p["x"]), round(p["y"]))
         for p in image_mask["content"]
     ]
+
+
+def get_anac_aerodromos_publicos() -> pandas.DataFrame:
+    fpath = datasets_dir / "anac" / "aerodromos_publicos.csv"
+    columns_map = {
+        "OACI": "id",
+        "Altitude": "altitude",
+        "Operação Diurna": "op_diurna",
+        "Operação Noturna": "op_noturna",
+        "Designação 1": "designacao",
+        "Comprimento 1": "comprimento",
+        "Largura 1": "largura",
+        "Superfície 1": "superficie"
+    }
+    df = pandas.read_csv(fpath)
+    df.rename(columns=columns_map, inplace=True)
+    df = df[list(columns_map.values())]
+    df[["designacao_left", "designacao_right"]] = df["designacao"].str.split("/", n=1, expand=True)
+    df.drop("designacao", axis=1, inplace=True)
+    df.set_index("id", inplace=True)
+    return df
