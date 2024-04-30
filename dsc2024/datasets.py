@@ -38,7 +38,8 @@ def get_public_dataset(
         df_anac = get_anac_aerodromos_publicos()
         df = handling.add_anac_extra_info(df, df_anac)
     if expand_metar_and_metaf:
-        df = handling.expand_metar_and_metaf_features(df)
+        df_metar_extra = get_metar_extra()
+        df = handling.expand_metar_and_metaf_features(df, df_metar_extra)
     if set_flightid_as_index:
         df.set_index("flightid", inplace=True)
     if add_image_vectors:
@@ -99,6 +100,16 @@ def get_image_mask_points() -> List[Tuple[int, int]]:
         (round(p["x"]), round(p["y"]))
         for p in image_mask["content"]
     ]
+
+
+@lru_cache
+def get_metar_extra() -> pandas.DataFrame:
+    fpath = datasets_dir / "metar" / "metar_extra.csv"
+    df = pandas.read_csv(fpath, parse_dates=["valid"])
+    # truncate hour
+    df.valid = df.valid.dt.floor("h")
+    df.set_index(["station", "valid"], inplace=True)
+    return df
 
 
 def get_anac_aerodromos_publicos() -> pandas.DataFrame:
