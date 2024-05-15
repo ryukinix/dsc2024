@@ -7,6 +7,8 @@ from typing import Optional, List
 import pandas as pd
 import datetime
 
+
+from loguru import logger
 from metpy.io.metar import Metar, parse_metar, ParseError
 
 
@@ -41,7 +43,7 @@ def parse_metar_as_dataframe(
                                                month=hora_ref.month)
                     metars.append(metar_parsed)
                 except (KeyError, ParseError) as e:
-                    print(f"Error({i}): {type(e)} - {e}")
+                    logger.warning(f"Error(row={i}): {type(e)} - {e}")
                     metars.append(default_metar_value)
                 finally:
                     continue
@@ -52,7 +54,7 @@ def parse_metar_as_dataframe(
             metar_parsed = parse_metar(metar_value, year=year, month=month)
             metars.append(metar_parsed)
         except ParseError as e:
-            print(f"dataset row:{i}", e)
+            logger.warning(f"Error(row={i}): {type(e)} - {e}")
             metars.append(default_metar_value)
 
     return pd.DataFrame.from_records(metars, index=index, columns=Metar._fields)
@@ -97,7 +99,7 @@ def add_anac_extra_info(
     df: pd.DataFrame,
     df_anac: pd.DataFrame
 ) -> pd.DataFrame:
-    df_origem = df_anac.add_prefix("origem_")
+    # df_origem = df_anac.add_prefix("origem_")
     df_destino = df_anac.add_prefix("destino_")
     return (
         df
