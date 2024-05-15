@@ -14,6 +14,7 @@ _datasets_dir = os.environ.get(
     os.path.join(_base_path, "datasets")
 )
 datasets_dir = Path(_datasets_dir)
+dataset_default = "public.csv"
 
 
 @lru_cache
@@ -25,7 +26,7 @@ def get_public_dataset(
     sampling: Optional[int] = None,
     set_flightid_as_index: bool = True
 ) -> pandas.DataFrame:
-    df = pandas.read_csv(datasets_dir / "public.csv")
+    df = pandas.read_csv(datasets_dir / dataset_default)
 
     if n := os.environ.get("DSC2024_SAMPLING"):
         sampling = int(n)
