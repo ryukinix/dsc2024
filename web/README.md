@@ -3,6 +3,8 @@
 In this application, we can visualize the delayed flights estimated
 previously using machine learning.
 
+Deployed at https://airdelay.manoel.dev/
+
 ## Potential tecnhologies
 
 - FastAPI: http server
