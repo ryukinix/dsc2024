@@ -16,6 +16,9 @@ _datasets_dir = os.environ.get(
 datasets_dir = Path(_datasets_dir)
 dataset_default = "public.csv"
 
+# ref: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+pandas.options.mode.copy_on_write = True
+
 
 @lru_cache
 def get_public_dataset(
@@ -110,6 +113,7 @@ def get_metar_extra() -> pandas.DataFrame:
     # truncate hour
     df.valid = df.valid.dt.floor("h")
     df.set_index(["station", "valid"], inplace=True)
+    df.sort_index(inplace=True)
     return df
 
 
