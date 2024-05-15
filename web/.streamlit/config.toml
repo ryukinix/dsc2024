@@ -1,0 +1,5 @@
+[browser]
+serverAddress = "localhost"
+
+[client]
+toolbarMode = "viewer"
