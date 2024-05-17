@@ -1,3 +1,5 @@
+# ref: https://docs.streamlit.io/develop/api-reference/configuration/config.toml#client
+
 [browser]
 serverAddress = "localhost"
 
