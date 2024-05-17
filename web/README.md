@@ -5,6 +5,12 @@ previously using machine learning.
 
 Deployed at https://airdelay.manoel.dev/
 
+## How to run:
+
+```
+make run
+```
+
 ## Potential tecnhologies
 
 - FastAPI: http server
