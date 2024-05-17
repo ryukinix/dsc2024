@@ -21,7 +21,7 @@ run: build
 	$(DOCKER_RUN) $(PROJECT_NAME)
 
 run-local:
-	streamlit run airdelay/main.py
+	pdm run streamlit run airdelay/main.py
 
 build:
 	docker build -t $(PROJECT_NAME) .

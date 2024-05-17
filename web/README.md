@@ -11,6 +11,19 @@ Deployed at https://airdelay.manoel.dev/
 make run
 ```
 
+This will use docker and there is no way to use development hot-reload
+mode. For this, install properly using python with:
+
+```
+make install
+```
+
+Then,
+
+```
+make run-local
+```
+
 ## Potential tecnhologies
 
 - FastAPI: http server
