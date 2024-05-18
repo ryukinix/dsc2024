@@ -29,11 +29,10 @@ with st.sidebar.form("slider"):
         "Espera em segundos",
         min_value=0,
         value=200,
-        max_value=1000,  # FIXME: use real values
+        max_value=400,
     )
     start_date = datetime.date(year=2022, month=5, day=31)
     end_date = start_date.replace(year=start_date.year + 1)
-    # FIXME: esta resetando o range apos pressionar run
     date_ranger_slider = st.slider(
         "Selecione um intervalo de vôos",
         min_value=start_date,
@@ -44,7 +43,7 @@ with st.sidebar.form("slider"):
         "Máximo de vôos simultâneos",
         min_value=1,
         value=3,
-        max_value=10,  # FIXME: use real values
+        max_value=10,
     )
     st.form_submit_button(label="Filter")
 
@@ -68,16 +67,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     return df_filtered
 
-# ## filters
 
-# # FOLIUM
-# center on Liberty Bell, add marker
-# m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
-# folium.Marker(
-#     [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
-# ).add_to(m)
-
-# # call to render Folium map in Streamlit
 df = datasets.get_catboost_regression()
 df_filtered = filter_dataframe(df)
 flights = df_filtered.drop_duplicates(subset=["origem", "destino"]).head(max_simultaneous_flights)
@@ -93,4 +83,3 @@ st_data = st_folium(
 )
 st.write(f"Flights: {len(df_filtered)}")
 st.dataframe(filter_dataframe(df))
-# # FOLIUM
