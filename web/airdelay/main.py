@@ -42,7 +42,7 @@ with st.sidebar.form("slider"):
     )
     max_simultaneous_flights = st.slider(
         "Máximo de vôos simultâneos",
-        min_value=1, # HMMM: maybe zero?
+        min_value=1,
         value=3,
         max_value=10,  # FIXME: use real values
     )
@@ -54,7 +54,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     start_date, end_date = [d for d in date_ranger_slider]
     date_filter = (df.dt_dep.dt.date >= start_date) & (df.dt_dep.dt.date <= end_date)
     origem_filter = df.origem.isin(origem_select)
-    destino_filter = df.origem.isin(destino_select)
+    destino_filter = df.destino.isin(destino_select)
     filters = [
         espera_filter,
         date_filter
@@ -80,6 +80,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 # # call to render Folium map in Streamlit
 df = datasets.get_catboost_regression()
 df_filtered = filter_dataframe(df)
+flights = df_filtered.drop_duplicates(subset=["origem", "destino"]).head(max_simultaneous_flights)
 folium_map = flightmap.create_folium_map(df_filtered.head(max_simultaneous_flights))
 st_data = st_folium(folium_map, width=750)
 st.write(f"Flights: {len(df_filtered)}")
