@@ -4,6 +4,7 @@ from datetime import datetime
 
 import folium
 import pandas as pd
+import streamlit as st
 
 from airdelay.mathutils import angle_between
 from airdelay.datasets import get_airport_geolocalization
@@ -45,14 +46,25 @@ def generate_coordinates(origem, destino, n=23) -> List[Coord]:
     ]
 
 
-def create_folium_map(df: pd.DataFrame) -> folium.Map:
+def create_map():
     brazil_lat_long = [-18.793889, -45.882778]
+    zoom_start = 5
     folium_map = folium.Map(
         location=brazil_lat_long,
         tiles="cartodb-voyager",
-        zoom_start=5
+        zoom_start=zoom_start
     )
 
+    if "center" not in st.session_state:
+        st.session_state["center"] = brazil_lat_long
+    if "zoom" not in st.session_state:
+        st.session_state["zoom"] = zoom_start
+
+    return folium_map
+
+
+def create_folium_map(df: pd.DataFrame) -> folium.Map:
+    folium_map = create_map()
     points: List[Point] = []
     for row in df.itertuples():
         has_delay = row.espera > 240

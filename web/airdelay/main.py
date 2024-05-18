@@ -82,7 +82,15 @@ df = datasets.get_catboost_regression()
 df_filtered = filter_dataframe(df)
 flights = df_filtered.drop_duplicates(subset=["origem", "destino"]).head(max_simultaneous_flights)
 folium_map = flightmap.create_folium_map(df_filtered.head(max_simultaneous_flights))
-st_data = st_folium(folium_map, width=750)
+st_data = st_folium(
+    folium_map,
+    center=st.session_state["center"],
+    zoom=st.session_state["zoom"],
+    key="new",
+    height=600,
+    width=1000,
+    returned_objects=[]
+)
 st.write(f"Flights: {len(df_filtered)}")
 st.dataframe(filter_dataframe(df))
 # # FOLIUM
