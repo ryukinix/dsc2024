@@ -1,11 +1,15 @@
 import datetime
-import folium
 import streamlit as st
+import pandas as pd
+import numpy as np
+from functools import reduce
 
 from streamlit_folium import st_folium
 
 from airdelay import flightmap
 from airdelay import datasets
+
+st.title("Airdelay: estimando espera de vôos")
 
 # ## filters
 with st.sidebar.form("slider"):
@@ -27,7 +31,7 @@ with st.sidebar.form("slider"):
         value=0,
         max_value=1000,  # FIXME: use real values
     )
-    start_date = datetime.datetime(year=2022, month=5, day=31)
+    start_date = datetime.date(year=2022, month=5, day=31)
     end_date = start_date.replace(year=start_date.year + 1)
     # FIXME: esta resetando o range apos pressionar run
     date_ranger_slider = st.slider(
@@ -38,11 +42,32 @@ with st.sidebar.form("slider"):
     )
     max_simultaneous_flights = st.slider(
         "Máximo de vôos simultâneos",
-        min_value=0,
+        min_value=-1, # HMMM: maybe zero?
         value=3,
         max_value=10,  # FIXME: use real values
     )
     st.form_submit_button(label="Run")
+
+
+def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    espera_filter = df.espera > espera_slider
+    start_date, end_date = [d for d in date_ranger_slider]
+    date_filter = (df.dt_dep.dt.date >= start_date) & (df.dt_dep.dt.date <= end_date)
+    origem_filter = df.origem.isin(origem_select)
+    destino_filter = df.origem.isin(destino_select)
+    filters = [
+        espera_filter,
+        date_filter
+    ]
+    if origem_select:
+        filters.append(origem_filter)
+    if destino_select:
+        filters.append(destino_filter)
+    compiled_filter = reduce(np.logical_and, filters)
+    df_filtered = df[compiled_filter]
+
+    return df_filtered
+
 # ## filters
 
 # # FOLIUM
@@ -53,5 +78,10 @@ with st.sidebar.form("slider"):
 # ).add_to(m)
 
 # # call to render Folium map in Streamlit
+df = datasets.get_catboost_regression()
+df_filtered = filter_dataframe(df)
+
 st_data = st_folium(flightmap.folium_map, width=750)
+st.write(f"Flights: {len(df_filtered)}")
+st.dataframe(filter_dataframe(df))
 # # FOLIUM

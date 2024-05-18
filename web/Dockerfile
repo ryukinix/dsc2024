@@ -25,7 +25,6 @@ COPY airdelay /app/airdelay
 ADD tmp-datasets/catboost_regression.csv /app/datasets/catboost_regression.csv
 ADD tmp-datasets/airport_geolocalization.csv /app/datasets/airport_geolocalization.csv
 COPY .streamlit /app/.streamlit
-# COPY templates /app/templates
-# COPY static /app/static
+ENV DSC2024_DATASETS_DIR=/app/datasets
 EXPOSE 8501
 CMD ["streamlit", "run", "/app/airdelay/main.py"]

@@ -20,3 +20,6 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+
+[tool.mypy]
+ignore_missing_imports = true

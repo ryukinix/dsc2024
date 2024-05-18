@@ -35,7 +35,7 @@ def get_best_icon(origem: str, destino: str) -> str:
     coord_destino = localizations[destino]
 
     angle = angle_between(coord_origem, coord_destino)
-    print(angle)
+    # print(angle)
     return icons.get_best_icon_based_on_angle(angle)
 
 
