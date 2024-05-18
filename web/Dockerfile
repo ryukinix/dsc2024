@@ -22,6 +22,8 @@ COPY --from=builder /app/.venv/ /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 # set command/entrypoint, adapt to fit your needs
 COPY airdelay /app/airdelay
+ADD tmp-datasets/catboost_regression.csv /app/datasets/catboost_regression.csv
+ADD tmp-datasets/airport_geolocalization.csv /app/datasets/airport_geolocalization.csv
 COPY .streamlit /app/.streamlit
 # COPY templates /app/templates
 # COPY static /app/static

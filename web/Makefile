@@ -23,7 +23,11 @@ run: build
 run-local:
 	pdm run streamlit run airdelay/main.py
 
-build:
+tmp-datasets:
+	mkdir -p tmp-datasets
+	cp ../datasets/catboost_regression.csv ../datasets/airport_geolocalization.csv tmp-datasets/
+
+build: tmp-datasets
 	docker build -t $(PROJECT_NAME) .
 
 publish: build
