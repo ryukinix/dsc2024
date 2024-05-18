@@ -14,12 +14,12 @@ localizations = get_airport_geolocalization()
 
 Coord = Tuple[float, float]
 
-
 @dataclass
 class Point:
     time: str
     coord: Coord
     icon: str = "/app/static/img/airplane-180.png"
+    icon_size = [30, 30]
 
 
 def get_best_icon(origem: str, destino: str) -> str:
@@ -47,7 +47,6 @@ def generate_coordinates(origem, destino, n=23) -> List[Coord]:
 
 def create_folium_map(df: pd.DataFrame) -> folium.Map:
     brazil_lat_long = [-18.793889, -45.882778]
-
     folium_map = folium.Map(
         location=brazil_lat_long,
         tiles="cartodb-voyager",
@@ -56,11 +55,12 @@ def create_folium_map(df: pd.DataFrame) -> folium.Map:
 
     points: List[Point] = []
     for row in df.itertuples():
+        has_delay = row.espera > 240
         flight_trajectory = [
             Point(
                 time=datetime.now().replace(hour=n, minute=1, microsecond=0).isoformat(),
                 coord=coord,
-                icon=get_best_icon(row.origem, row.destino)
+                icon=icons.get_airplane_rotating_icon() if has_delay and n > 20 else get_best_icon(row.origem, row.destino)
             )
             for n, coord in enumerate(generate_coordinates(row.origem, row.destino))
         ]
@@ -79,7 +79,7 @@ def create_folium_map(df: pd.DataFrame) -> folium.Map:
                 "icon": "marker",
                 "iconstyle": {
                     "iconUrl": point.icon,
-                    "iconSize": [30, 30],
+                    "iconSize": point.icon_size,
                 },
             },
         }
