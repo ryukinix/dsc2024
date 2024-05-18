@@ -33,4 +33,4 @@ make run-local
 
 [Streamlit]: https://docs.streamlit.io/
 [Folium]: https://python-visualization.github.io/folium/latest/
-[Streamlint_folium]: https://folium.streamlit.app/
+[Streamlit_folium]: https://folium.streamlit.app/
