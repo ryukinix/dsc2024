@@ -2,6 +2,10 @@
 
 ref: https://comp.ita.br/dsc/edicoes/2024/
 
+Live demo at https://airdelay.manoel.dev and final [presentation].
+
+[presentation]: https://docs.google.com/presentation/d/e/2PACX-1vSwBhQqeJUUEVwybUGQqj4d-X4YCD1GQj3zUwGKxKU7kXSSIUQjWb2sYP85RhLngQ/pub?start=true&loop=false&delayms=30000#slide=id.p1
+
 # Setup / Run notebook
 
 Ensure you have [pdm] installed, then run in the roof of the
