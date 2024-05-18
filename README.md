@@ -4,7 +4,7 @@ Competition description: https://comp.ita.br/dsc/edicoes/2024/
 
 Live demo at https://airdelay.manoel.dev and final google
 [presentation]. The live talk at ITA Engineering Education For The
-Future event can be watch at [youtube] (PT-BR).
+Future event can be watched on [youtube] (PT-BR).
 
 [presentation]: https://docs.google.com/presentation/d/e/2PACX-1vSwBhQqeJUUEVwybUGQqj4d-X4YCD1GQj3zUwGKxKU7kXSSIUQjWb2sYP85RhLngQ/pub?start=true&loop=false&delayms=30000#slide=id.p1
 [youtube]: https://youtu.be/8dTiRw5rD_M?t=4678
