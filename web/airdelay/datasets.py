@@ -35,5 +35,6 @@ def get_catboost_regression() -> pd.DataFrame:
         datasets_dir / "catboost_regression.csv",
         parse_dates=parse_dates,
     )
+    df.sort_values(by="espera", inplace=True)
     selected_columns = ["origem", "destino", "dt_dep", "dt_arr", "espera"]
     return df[selected_columns]
