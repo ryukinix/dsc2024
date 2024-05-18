@@ -1,6 +1,6 @@
 import folium
 
-airplane_icon_url = "http://maps.google.com/mapfiles/kml/shapes/airports.png"
+airplane_icon_url = "/app/static/img/airplane-180.png"
 
 
 folium_map = folium.Map(
@@ -58,7 +58,7 @@ features = [
             "icon": "marker",
             "iconstyle": {
                 "iconUrl": airplane_icon_url,
-                "iconSize": [20, 20],
+                "iconSize": [30, 30],
             },
         },
     }

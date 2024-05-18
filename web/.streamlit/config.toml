@@ -5,3 +5,6 @@ serverAddress = "localhost"
 
 [client]
 toolbarMode = "viewer"
+
+[server]
+enableStaticServing = true
