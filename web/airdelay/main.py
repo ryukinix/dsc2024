@@ -1,14 +1,15 @@
-from datetime import datetime
+import datetime
 import folium
 import streamlit as st
 
 from streamlit_folium import st_folium
 
 from airdelay import flightmap
+from airdelay import datasets
 
 # ## filters
 with st.sidebar.form("slider"):
-    airports = ["SBSP", "SBMG"]
+    airports = list(datasets.get_airport_geolocalization().keys())
     destino_select = st.multiselect(
         label="Destino",
         options=airports,
@@ -24,10 +25,10 @@ with st.sidebar.form("slider"):
         "Espera em segundos",
         min_value=0,
         value=0,
-        max_value=4000,  # FIXME: use real values
+        max_value=1000,  # FIXME: use real values
     )
-    start_date = datetime.today()
-    end_date = start_date.replace(year=start_date.year - 1)
+    start_date = datetime.datetime(year=2022, month=5, day=31)
+    end_date = start_date.replace(year=start_date.year + 1)
     # FIXME: esta resetando o range apos pressionar run
     date_ranger_slider = st.slider(
         "Selecione um intervalo de vôos",
