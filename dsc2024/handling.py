@@ -37,7 +37,7 @@ def parse_metar_as_dataframe(
                     column = "origem" if metar_column == "metar" else "destino"
                     station = row[column]
                     hora_ref = row["hora_ref"]
-                    metar_value = metar_extra.metar.at[(station, hora_ref)].values[0]
+                    metar_value = metar_extra.metar.loc[(station, hora_ref)].values[0]
                     metar_parsed = parse_metar(metar_value,
                                                year=hora_ref.year,
                                                month=hora_ref.month)

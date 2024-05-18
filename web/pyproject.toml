@@ -1,0 +1,25 @@
+[project]
+name = "airdelay"
+version = "0.1.0"
+description = "Airdelay it's a visual application that estimate delayed flights"
+authors = [
+    {name = "Manoel Vilela", email = "manoelnt0@gmail.com"},
+]
+dependencies = [
+    "streamlit-folium>=0.20.0",
+    "geopy>=2.4.1",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
+
+[tool.mypy]
+ignore_missing_imports = true
