@@ -1,76 +1,84 @@
+from typing import Tuple, List
+
+from dataclasses import dataclass
 import folium
+from datetime import datetime
+from datasets import get_airport_geolocalization
 
-airplane_icon_url = "/app/static/img/airplane-180.png"
 
+localizations = get_airport_geolocalization()
+
+Coord = Tuple[float, float]
+
+
+@dataclass
+class Point:
+    time: str
+    coord: Coord
+    icon: str = "/app/static/img/airplane-180.png"
+
+
+brazil_lat_long = [-18.793889, -45.882778]
 
 folium_map = folium.Map(
-    location=[-18.793889, -45.882778],
+    location=brazil_lat_long,
     tiles="cartodb-voyager",
     zoom_start=6
 )
 
-# Lon, Lat order (reversed)
-lines = [
-    {
-        "coordinates": [
-            [-18.76451516151428, -45.68159659061569],
-            [-23.75964426994324, -50.682590062684206],
-        ],
-        "dates": ["2017-06-02T00:00:00", "2017-06-02T00:10:00"],
-        "color": "red",
-    },
-    {
-        "coordinates": [
-            [-18.75964426994324, -45.682590062684206],
-            [-23.75964426994324, -50.682590062684206],
-        ],
-        "dates": ["2017-06-02T00:10:00", "2017-06-02T00:20:00"],
-        "color": "red",
-    },
-    {
-        "coordinates": [
-            [-18.7575843334198, -45.679505030038506],
-            [-23.75964426994324, -50.682590062684206],
-        ],
-        "dates": ["2017-06-02T00:20:00", "2017-06-02T00:30:00"],
-        "color": "red",
-        "weight": 15,
-    },
-    {
-        "coordinates": [
-            [-18.76337790489197, -45.678040905014065],
-            [-23.75964426994324, -50.682590062684206],
-        ],
-        "dates": ["2017-06-02T00:30:00", "2017-06-02T00:40:00"],
-        "color": "red",
-    },
+
+def generate_coordinates(origem, destino, n=23) -> List[Coord]:
+    coord_origem = localizations[origem]
+    coord_destino = localizations[destino]
+    origem_lon, origem_lat = coord_origem
+    destino_lon, destino_lat = coord_destino
+
+    lon_step = (destino_lon - origem_lon) / n
+    lat_step = (destino_lat - origem_lat) / n
+    return [
+        (origem_lon + k*lon_step, origem_lat + k*lat_step)
+        for k in range(n)
+    ]
+
+origem = "SBSP"
+destino = "SBRJ"
+
+points: List[Point] = [
+    Point(
+        time=datetime.now().replace(hour=n, minute=1, microsecond=0).isoformat(),
+        coord=coord,
+    )
+
+    for n, coord in enumerate(generate_coordinates(origem, destino))
 ]
+
 
 features = [
     {
         "type": "Feature",
         "geometry": {
             "type": "Point",
-            "coordinates": list(reversed(line["coordinates"][0])),
+            "coordinates": point.coord,
         },
         "properties": {
-            "time": line["dates"][0],
+            "time": point.time,
             "icon": "marker",
             "iconstyle": {
-                "iconUrl": airplane_icon_url,
+                "iconUrl": point.icon,
                 "iconSize": [30, 30],
             },
         },
     }
-    for line in lines
+    for point in points
 ]
+
 
 folium.plugins.TimestampedGeoJson(
     {"type": "FeatureCollection", "features": features},
-    period="PT1M",
-    duration="PT9M",
+    period="PT1H",
+    duration="PT59M",
     add_last_point=False,
     auto_play=False,
-    # , loop_button=True
-    # , time_slider_drag_update=True
+    time_slider_drag_update=True,
+    loop_button=True,
 ).add_to(folium_map)
