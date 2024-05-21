@@ -42,3 +42,7 @@ retrieve datasets. Request permission from some member of the team.
 
 - Manoel Vilela
 - Jorge Franco
+
+# License
+
+Apache 2.0 license
